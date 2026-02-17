@@ -96,16 +96,32 @@
 
 .genres {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 2rem;
 }
 
 .genre-pill {
-    padding: 5px 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    font-size: 0.9rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    /* Slightly darker */
+    border-radius: 24px;
+    /* More rounded */
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #eee;
+    transition: all 0.2s ease;
+    cursor: default;
+    display: inline-block;
+}
+
+.genre-pill:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    color: #fff;
 }
 
 .overview {
@@ -114,6 +130,109 @@
     color: #e0e0e0;
     max-width: 800px;
 }
+
+/* Seasons Section */
+.seasons-section {
+    margin-top: 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+}
+
+.seasons-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.seasons-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.season-card {
+    display: flex;
+    gap: 2rem;
+    background: transparent;
+    /* Clean look as per image */
+    border-radius: 8px;
+    padding: 1rem;
+    transition: background-color 0.2s;
+    border: 1px solid transparent;
+    /* Reserve space for border */
+}
+
+.season-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    /* Highlight on hover */
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.season-poster {
+    flex: 0 0 130px;
+    /* Slightly larger fixed width */
+}
+
+.season-poster img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    display: block;
+}
+
+.season-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 0.5rem;
+}
+
+.season-header-row h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+.season-meta {
+    display: flex;
+    gap: 8px;
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+    align-items: center;
+}
+
+.season-meta .year {
+    color: #fff;
+}
+
+.season-meta .bullet {
+    color: #fff;
+}
+
+.season-meta .episode-count {
+    color: #fff;
+}
+
+.season-overview-container {
+    flex: 1;
+}
+
+.season-overview {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #ccc;
+    margin: 0;
+}
+
+.season-overview.no-overview {
+    font-style: italic;
+    opacity: 0.6;
+}
+
 
 .reviews-section {
     position: relative;

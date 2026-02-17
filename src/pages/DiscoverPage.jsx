@@ -2,25 +2,29 @@ import { useSearchParams } from "react-router-dom";
 import { useDiscoveries } from "../hooks/useDiscoveries";
 import MovieCard from "../components/MovieCard";
 import "./DiscoverPage.css";
+import { useMovieGenres } from "../hooks/useMovieGenres";
+import { useTVGenres } from "../hooks/useTVGenres";
 
 export const DiscoverPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	const mediaType = searchParams.get("media_type") || "movie";
-	const genreId = searchParams.get("genre");
+	const genreId = searchParams.get("genreId");
 	const page = parseInt(searchParams.get("page") || "1");
-	// Supporting fromYear/toYear if backend supports it, checking requirements "Year" might be specific year
-	// If backend supports filtering by range, we pass it. If 'Year' is strict equality, we might need to adjust.
-	// Assuming keys correspond to backend params.
+	const year = searchParams.get("year");
+
+	// Params for API
 	const params = {
-		genre: genreId,
+		genreId: genreId,
 		page: page,
-		fromYear: searchParams.get("fromYear"),
-		toYear: searchParams.get("toYear"),
-		// Year: searchParams.get("year") // If existing year selector was using 'year'
+		year: year
 	};
 
 	const { loading, results, totalPages } = useDiscoveries(mediaType, params);
+
+	// Fetch genres to display name
+	const { genres: movieGenres } = useMovieGenres();
+	const { genres: tvGenres } = useTVGenres();
 
 	const handlePageChange = (newPage) => {
 		if (newPage >= 1 && newPage <= totalPages) {
@@ -34,7 +38,21 @@ export const DiscoverPage = () => {
 
 	const getTitle = () => {
 		let title = mediaType === 'movie' ? 'Movies' : 'TV Series';
-		if (genreId) title += ` - Genre ${genreId}`; // ideally mapping ID to name if we had the list here
+
+		if (genreId) {
+			const genres = mediaType === 'movie' ? movieGenres : tvGenres;
+			const genre = genres?.find(g => g.id.toString() === genreId.toString());
+			if (genre) {
+				title += ` - ${genre.name}`;
+			} else {
+				title += ` - Genre ${genreId}`;
+			}
+		}
+
+		if (year) {
+			title += ` (${year})`;
+		}
+
 		return title;
 	};
 
@@ -53,7 +71,9 @@ export const DiscoverPage = () => {
 							))}
 						</div>
 					) : (
-						<div className="no-results">No results found</div>
+						<div className="no-results">
+							{genreId ? "No results found for this filtered selection." : "No results found."}
+						</div>
 					)}
 
 					{totalPages > 1 && (

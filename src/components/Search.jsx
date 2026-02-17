@@ -31,9 +31,8 @@ export const Search = () => {
 								<button
 									key={genre.id}
 									onClick={() => {
-										console.log({ genre });
-
-										navigate(`/discover/movies/${genre.id}`);
+										// console.log({ genre });
+										navigate(`/discover?media_type=movie&genreId=${genre.id}`);
 									}}
 								>
 									{genre.name}
@@ -61,9 +60,8 @@ export const Search = () => {
 								<button
 									key={genre.id}
 									onClick={() => {
-										console.log({ genre });
-
-										navigate(`/discover/tv/${genre.id}`);
+										// console.log({ genre });
+										navigate(`/discover?media_type=tv&genreId=${genre.id}`);
 									}}
 								>
 									{genre.name}

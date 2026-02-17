@@ -96,7 +96,10 @@ const DetailsPage = () => {
                     <div className="meta">
                         <span>{year}</span>
                         <span>⭐ {details.voteAverage?.toFixed(1)}</span>
-                        <span>{runtime} min</span>
+                        {runtime ?
+                            <span>{runtime} min</span>
+                            : <span></span>
+                        }
                     </div>
 
                     <div className="genres">
@@ -107,6 +110,42 @@ const DetailsPage = () => {
                     <p className="overview">{details.overview}</p>
 
                     {/* Cast Section could go here */}
+
+                    {details.seasons && details.seasons.length > 0 && (
+                        <div className="seasons-section">
+                            <h2>Seasons</h2>
+                            <div className="seasons-list">
+                                {details.seasons.map(season => (
+                                    <div key={season.id} className="season-card">
+                                        <div className="season-poster">
+                                            <img
+                                                src={season.posterPath ? `https://image.tmdb.org/t/p/w200${season.posterPath}` : 'https://via.placeholder.com/200x300?text=No+Image'}
+                                                alt={season.name}
+                                            />
+                                        </div>
+                                        <div className="season-info">
+                                            <div className="season-header-row">
+                                                <h3>{season.name}</h3>
+                                                {/* If we wanted to show specific name vs number differentiation, we could do it here, but generally name suffices */}
+                                            </div>
+                                            <div className="season-meta">
+                                                <span className="year">{season.airDate ? new Date(season.airDate).getFullYear() : 'N/A'}</span>
+                                                <span className="bullet">•</span>
+                                                <span className="episode-count">{season.episodeCount} Episodes</span>
+                                            </div>
+                                            <div className="season-overview-container">
+                                                {season.overview ? (
+                                                    <p className="season-overview">{season.overview}</p>
+                                                ) : (
+                                                    <p className="season-overview no-overview">No overview available.</p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 

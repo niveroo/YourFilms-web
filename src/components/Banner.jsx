@@ -17,7 +17,7 @@ const Banner = () => {
 	const [tvYears, setTvYears] = useState({ from: null, to: null });
 
 	const handleGenreClick = (type, genreId, years) => {
-		let url = `/discover?media_type=${type}&genre=${genreId}`;
+		let url = `/discover?media_type=${type}&genreId=${genreId}`;
 		/* Note: Backend API for discover might expect 'Year' or query params for years. 
 		   Requirements say: "W otworzonej przestrzeni z gatunkami także jest możliwość wyboru roku wydania tytułu." 
 		   and "Discover GET /api/Movies/discover/{type} ... Year".
