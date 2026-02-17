@@ -1,0 +1,26 @@
+.search-page {
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #141414, #000000);
+    color: #fff;
+}
+
+.search-page .movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+.search-page .no-results {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #888;
+    margin-top: 5rem;
+}
+
+.search-page .loading {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #fff;
+}

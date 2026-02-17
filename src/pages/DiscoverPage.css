@@ -1,0 +1,55 @@
+.discover-page {
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #141414, #000000);
+    color: #fff;
+}
+
+.discover-page .movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+.discover-page .no-results {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #888;
+    margin-top: 5rem;
+}
+
+.discover-page .loading {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-top: 2rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+.pagination button {
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

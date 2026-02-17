@@ -1,0 +1,65 @@
+.login-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    width: 100%;
+    border-radius: 15px;
+    background-color: rgba(240, 248, 255, 0.2);
+    backdrop-filter: blur(10px);
+    font-size: 1em;
+    padding: 0.7em;
+    gap: 1em;
+    align-items: start;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form label {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.login-form input {
+    min-width: none;
+    max-width: 100%;
+    padding: 0.8em;
+    font-size: 1em;
+    border: 2px solid currentColor;
+    border-radius: 8px;
+    background-color: transparent;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-form input:focus {
+    outline: none;
+    border: 2px solid currentColor;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.login-form p {
+    color: red;
+    font-size: 0.9em;
+    margin-top: -1em;
+    margin-bottom: 0.5em;
+}
+
+.checkbox-class {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.checkbox-class input {
+    width: auto
+}
+
+.login-form button {
+    padding: 0.8em 1.5em;
+    font-size: 1.2em;
+    color: inherit;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}

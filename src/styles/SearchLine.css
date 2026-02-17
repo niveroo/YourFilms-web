@@ -1,0 +1,17 @@
+.banner-search {
+    display: flex;
+    justify-items: center;
+    flex-grow: 1;
+    max-width: 700px;
+}
+
+.banner-search input {
+    padding-inline: 10px;
+    border-radius: 12px;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.banner-search button {
+    border-radius: 12px;
+}
