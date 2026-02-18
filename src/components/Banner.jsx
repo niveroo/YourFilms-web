@@ -13,18 +13,12 @@ const Banner = () => {
 	const { genres: movieGenres } = useMovieGenres();
 	const { genres: tvGenres } = useTVGenres();
 
-	const [movieYears, setMovieYears] = useState({ from: null, to: null });
-	const [tvYears, setTvYears] = useState({ from: null, to: null });
+	const [movieYear, setMovieYear] = useState(null);
+	const [tvYear, setTvYear] = useState(null);
 
-	const handleGenreClick = (type, genreId, years) => {
+	const handleGenreClick = (type, genreId, year) => {
 		let url = `/discover?media_type=${type}&genreId=${genreId}`;
-		/* Note: Backend API for discover might expect 'Year' or query params for years. 
-		   Requirements say: "W otworzonej przestrzeni z gatunkami także jest możliwość wyboru roku wydania tytułu." 
-		   and "Discover GET /api/Movies/discover/{type} ... Year".
-		   Assuming backend handles year filtering if provided.
-		*/
-		if (years.from) url += `&fromYear=${years.from}`;
-		if (years.to) url += `&toYear=${years.to}`;
+		if (year) url += `&year=${year}`;
 		navigate(url);
 	};
 
@@ -43,17 +37,15 @@ const Banner = () => {
 						<div className="genre-grid">
 							{movieGenres.map(genre => (
 								<div key={genre.id} className="genre-item"
-									onClick={(e) => { e.stopPropagation(); handleGenreClick('movie', genre.id, movieYears); }}>
+									onClick={(e) => { e.stopPropagation(); handleGenreClick('movie', genre.id, movieYear); }}>
 									{genre.name}
 								</div>
 							))}
 						</div>
 						<div className="year-selector">
 							<YearSelector
-								fromYear={movieYears.from}
-								toYear={movieYears.to}
-								onFromYearChange={(val) => setMovieYears(prev => ({ ...prev, from: val }))}
-								onToYearChange={(val) => setMovieYears(prev => ({ ...prev, to: val }))}
+								year={movieYear}
+								onYearChange={setMovieYear}
 							/>
 						</div>
 					</div>
@@ -65,17 +57,15 @@ const Banner = () => {
 						<div className="genre-grid">
 							{tvGenres.map(genre => (
 								<div key={genre.id} className="genre-item"
-									onClick={(e) => { e.stopPropagation(); handleGenreClick('tv', genre.id, tvYears); }}>
+									onClick={(e) => { e.stopPropagation(); handleGenreClick('tv', genre.id, tvYear); }}>
 									{genre.name}
 								</div>
 							))}
 						</div>
 						<div className="year-selector">
 							<YearSelector
-								fromYear={tvYears.from}
-								toYear={tvYears.to}
-								onFromYearChange={(val) => setTvYears(prev => ({ ...prev, from: val }))}
-								onToYearChange={(val) => setTvYears(prev => ({ ...prev, to: val }))}
+								year={tvYear}
+								onYearChange={setTvYear}
 							/>
 						</div>
 					</div>

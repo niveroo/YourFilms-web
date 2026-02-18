@@ -12,10 +12,9 @@ export const Search = () => {
 	const { loading: movieGenresLoading, genres: movieGenres } = useMovieGenres();
 	const { loading: tvGenresLoading, genres: tvGenres } = useTVGenres();
 
-	const [fromYear, setFromYear] = useState(null);
-	const [toYear, setToYear] = useState(null);
+	const [year, setYear] = useState(null);
 
-	console.log({ fromYear, toYear });
+	// console.log({ year });
 
 	return (
 		<div className="banner genres-relative">
@@ -31,8 +30,9 @@ export const Search = () => {
 								<button
 									key={genre.id}
 									onClick={() => {
-										// console.log({ genre });
-										navigate(`/discover?media_type=movie&genreId=${genre.id}`);
+										let url = `/discover?media_type=movie&genreId=${genre.id}`;
+										if (year) url += `&year=${year}`;
+										navigate(url);
 									}}
 								>
 									{genre.name}
@@ -41,10 +41,8 @@ export const Search = () => {
 						</div>
 
 						<YearSelector
-							fromYear={fromYear}
-							toYear={toYear}
-							onFromYearChange={setFromYear}
-							onToYearChange={setToYear}
+							year={year}
+							onYearChange={setYear}
 						/>
 					</div>
 				</div>
@@ -60,8 +58,9 @@ export const Search = () => {
 								<button
 									key={genre.id}
 									onClick={() => {
-										// console.log({ genre });
-										navigate(`/discover?media_type=tv&genreId=${genre.id}`);
+										let url = `/discover?media_type=tv&genreId=${genre.id}`;
+										if (year) url += `&year=${year}`;
+										navigate(url);
 									}}
 								>
 									{genre.name}
@@ -70,10 +69,8 @@ export const Search = () => {
 						</div>
 
 						<YearSelector
-							fromYear={fromYear}
-							toYear={toYear}
-							onFromYearChange={setFromYear}
-							onToYearChange={setToYear}
+							year={year}
+							onYearChange={setYear}
 						/>
 					</div>
 				</div>

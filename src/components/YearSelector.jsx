@@ -1,46 +1,31 @@
+
 export const YearSelector = ({
-	fromYear,
-	toYear,
-
-	onFromYearChange,
-	onToYearChange,
+	year,
+	onYearChange,
 }) => {
-	return (
-		<div className="year-range">
-			From
-			<select
-				onChange={(e) => {
-					console.log("From year:", e.target.value);
-					onFromYearChange(e.target.value);
-					onToYearChange((prev) => Math.max(prev, e.target.value));
-				}}
-			>
-				{YEARS.map((year) => (
-					<option key={year} value={year} selected={year === fromYear}>
-						{year}
-					</option>
-				))}
-			</select>
-			to
-			<select
-				onChange={(e) => {
-					console.log("To year:", e.target.value);
+	const currentYear = new Date().getFullYear();
+	const years = [];
+	for (let i = currentYear; i >= 1900; i--) {
+		years.push(i);
+	}
 
-					onToYearChange(e.target.value);
-					onFromYearChange((prev) => Math.min(prev, e.target.value));
+	return (
+		<div className="year-selector-container">
+			<select
+				value={year || ""}
+				onChange={(e) => {
+					const val = e.target.value;
+					onYearChange(val ? parseInt(val) : null);
 				}}
+				className="year-dropdown"
 			>
-				{YEARS.map((year) => (
-					<option key={year} value={year} selected={year === toYear}>
-						{year}
+				<option value="">Year</option>
+				{years.map((y) => (
+					<option key={y} value={y}>
+						{y}
 					</option>
 				))}
 			</select>
 		</div>
 	);
 };
-const YEARS = [];
-
-for (let year = 2000; year <= new Date().getFullYear(); year++) {
-	YEARS.push(year);
-}
