@@ -22,8 +22,10 @@ const Banner = () => {
 		navigate(url);
 	};
 
-	const handleTypeClick = (type) => {
-		navigate(`/discover?media_type=${type}`);
+	const handleTypeClick = (type, year) => {
+		let url = `/discover?media_type=${type}`;
+		if (year) url += `&year=${year}`;
+		navigate(url);
 	};
 
 	return (
@@ -32,7 +34,7 @@ const Banner = () => {
 				<Logo />
 
 				<div className="nav-item">
-					<span className="nav-link" onClick={() => handleTypeClick('movie')}>Movies</span>
+					<span className="nav-link" onClick={() => handleTypeClick('movie', movieYear)}>Movies</span>
 					<div className="dropdown-menu">
 						<div className="genre-grid">
 							{movieGenres.map(genre => (
@@ -52,7 +54,7 @@ const Banner = () => {
 				</div>
 
 				<div className="nav-item">
-					<span className="nav-link" onClick={() => handleTypeClick('tv')}>TV Series</span>
+					<span className="nav-link" onClick={() => handleTypeClick('tv', tvYear)}>TV Series</span>
 					<div className="dropdown-menu">
 						<div className="genre-grid">
 							{tvGenres.map(genre => (
