@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import API from '../services/API';
 import './DetailsPage.css';
 
@@ -103,7 +103,15 @@ const DetailsPage = () => {
                     </div>
 
                     <div className="genres">
-                        {details.genres?.map(g => <span key={g.id} className="genre-pill">{g.name}</span>)}
+                        {details.genres?.map(g => (
+                            <Link
+                                key={g.id}
+                                to={`/discover?media_type=${type}&genreId=${g.id}`}
+                                className="genre-pill"
+                            >
+                                {g.name}
+                            </Link>
+                        ))}
                     </div>
 
                     <h3>Overview</h3>

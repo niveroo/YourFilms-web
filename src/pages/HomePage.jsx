@@ -8,12 +8,13 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [timeWindow, setTimeWindow] = useState('day');
 
     useEffect(() => {
         const fetchTrending = async () => {
             setLoading(true);
             try {
-                const data = await API.getTrending('day', page);
+                const data = await API.getTrending(timeWindow, page);
                 setTrending(data.results || []);
                 setTotalPages(data.totalPages || 0);
             } catch (error) {
@@ -24,7 +25,15 @@ const HomePage = () => {
         };
 
         fetchTrending();
-    }, [page]);
+    }, [page, timeWindow]);
+
+    const handleTimeWindowChange = (newWindow) => {
+        if (newWindow !== timeWindow) {
+            setTimeWindow(newWindow);
+            setPage(1);
+        }
+    };
+
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -36,7 +45,23 @@ const HomePage = () => {
     return (
         <div className='home-page'>
             <section className="trending-section">
-                <h1 className="section-title">Trending Now</h1>
+                <div className="section-header">
+                    <h1 className="section-title">Trending Now</h1>
+                    <div className="time-window-toggle">
+                        <button
+                            className={`toggle-btn ${timeWindow === 'day' ? 'active' : ''}`}
+                            onClick={() => handleTimeWindowChange('day')}
+                        >
+                            Today
+                        </button>
+                        <button
+                            className={`toggle-btn ${timeWindow === 'week' ? 'active' : ''}`}
+                            onClick={() => handleTimeWindowChange('week')}
+                        >
+                            This Week
+                        </button>
+                    </div>
+                </div>
                 {loading ? (
                     <div className="loading">Loading...</div>
                 ) : (

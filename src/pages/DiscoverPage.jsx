@@ -12,12 +12,14 @@ export const DiscoverPage = () => {
 	const genreId = searchParams.get("genreId");
 	const page = parseInt(searchParams.get("page") || "1");
 	const year = searchParams.get("year");
+	const sort = searchParams.get("sort") || "PopularityDesc";
 
 	// Params for API
 	const params = {
 		genreId: genreId,
 		page: page,
-		year: year
+		year: year,
+		sort: sort
 	};
 
 	const { loading, results, totalPages } = useDiscoveries(mediaType, params);
@@ -56,9 +58,35 @@ export const DiscoverPage = () => {
 		return title;
 	};
 
+	const handleSortChange = (newSort) => {
+		if (sort !== newSort) {
+			setSearchParams(prev => {
+				prev.set("sort", newSort);
+				prev.set("page", "1");
+				return prev;
+			});
+		}
+	};
+
 	return (
 		<div className="discover-page">
-			<h1 className="section-title">{getTitle()}</h1>
+			<div className="discover-header">
+				<h1 className="section-title">{getTitle()}</h1>
+				<div className="time-window-toggle sort-toggle">
+					<button
+						className={`toggle-btn ${sort === 'PopularityDesc' ? 'active' : ''}`}
+						onClick={() => handleSortChange('PopularityDesc')}
+					>
+						Popular
+					</button>
+					<button
+						className={`toggle-btn ${sort === 'RatingDesc' ? 'active' : ''}`}
+						onClick={() => handleSortChange('RatingDesc')}
+					>
+						Highest Rated
+					</button>
+				</div>
+			</div>
 
 			{loading ? (
 				<div className="loading">Loading...</div>
