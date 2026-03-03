@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import API from '../services/API';
 import BookmarkMenu from '../components/BookmarkMenu';
 import './DetailsPage.css';
+import starFilled from '../assets/star-filled.png';
 
 const DetailsPage = () => {
     const { isLoggedIn } = useSelector((state) => state.user);
@@ -132,7 +133,10 @@ const DetailsPage = () => {
                     <p className="tagline">{details.tagline}</p>
                     <div className="meta">
                         <span>{year}</span>
-                        <span>⭐ {details.voteAverage?.toFixed(1)}</span>
+                        <span>
+                            <img src={starFilled} alt="star" className="star-icon-img" />
+                            {details.voteAverage?.toFixed(1)}
+                        </span>
                         {runtime ?
                             <span>{runtime} min</span>
                             : <span></span>
@@ -202,7 +206,10 @@ const DetailsPage = () => {
                             <div key={review.id} className="review-card">
                                 <div className="review-header">
                                     <span className="user">{review.userId}</span>
-                                    <span className="rating">⭐ {review.rating}/10</span>
+                                    <span className="rating">
+                                        <img src={starFilled} alt="star" className="star-icon-img" />
+                                        {review.rating}/10
+                                    </span>
                                 </div>
                                 <p>{review.content}</p>
                             </div>

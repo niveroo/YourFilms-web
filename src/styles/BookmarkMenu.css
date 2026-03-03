@@ -138,6 +138,75 @@
     background: rgba(255, 68, 68, 0.2);
 }
 
+.btn-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.status-icons-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    transition: gap 0.3s ease;
+}
+
+.bookmark-menu-container:hover .status-icons-wrapper {
+    gap: 8px;
+}
+
+.status-star-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.star-icon-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    transition: transform 0.2s;
+}
+
+.delete-bookmark-btn {
+    width: 0;
+    height: 28px;
+    background: rgba(255, 51, 102, 0.2);
+    border: 1px solid rgba(255, 51, 102, 0.3);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+}
+
+.delete-bookmark-btn img {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    object-fit: contain;
+    /* Remove the white filter if we want original colors, or keep it if it's supposed to be white */
+    /* The asset is white-bin.png, so maybe it doesn't need a filter if background is dark */
+}
+
+.bookmark-menu-container:hover .delete-bookmark-btn {
+    width: 50px;
+    opacity: 1;
+    padding: 0 0px;
+    margin-left: 0px;
+}
+
+.delete-bookmark-btn:hover {
+    background: rgba(255, 51, 102, 0.4);
+    border-color: #ff3366;
+}
+
 @keyframes fadeInQuick {
     from {
         opacity: 0;

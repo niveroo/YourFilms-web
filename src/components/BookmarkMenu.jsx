@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/BookmarkMenu.css';
+import starFilled from '../assets/star-filled.png';
+import starEmpty from '../assets/star-empty.png';
+import trashIcon from '../assets/white-bin.png';
 
 const BookmarkMenu = ({ bookmarkStatus, isLoggedIn, onSave }) => {
     const [localStatus, setLocalStatus] = useState({
@@ -62,9 +65,27 @@ const BookmarkMenu = ({ bookmarkStatus, isLoggedIn, onSave }) => {
     return (
         <div className="bookmark-menu-container" onMouseLeave={handleMouseLeave}>
             <div className="bookmark-main-btn">
-                <span className="current-category">
-                    {currentLabel}
-                </span>
+                <div className="btn-content-wrapper">
+                    <span className="current-label">{currentLabel}</span>
+                    <div className="status-icons-wrapper">
+                        {localStatus.category && (
+                            <img
+                                src={localStatus.isFavorite ? starFilled : starEmpty}
+                                alt="status"
+                                className="status-star-icon"
+                            />
+                        )}
+                        {localStatus.category && (
+                            <button
+                                className="delete-bookmark-btn"
+                                onClick={(e) => handleCategoryClick('none', e)}
+                                title="Remove Bookmark"
+                            >
+                                <img src={trashIcon} alt="delete" />
+                            </button>
+                        )}
+                    </div>
+                </div>
             </div>
 
             <div className="bookmark-dropdown">
@@ -85,18 +106,11 @@ const BookmarkMenu = ({ bookmarkStatus, isLoggedIn, onSave }) => {
                         title={localStatus.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
                     >
                         <span>Favorites</span>
-                        <span className="star-icon">{localStatus.isFavorite ? '★' : '☆'}</span>
+                        <span className="star-icon">
+                            <img src={localStatus.isFavorite ? starFilled : starEmpty} alt="favorite" className="star-icon-img" />
+                        </span>
                     </div>
 
-                    {localStatus.category && (
-                        <div
-                            className="dropdown-item clear-btn"
-                            onClick={(e) => handleCategoryClick('none', e)}
-                            title="Remove from Lists"
-                        >
-                            Remove
-                        </div>
-                    )}
                 </div>
             </div>
         </div>

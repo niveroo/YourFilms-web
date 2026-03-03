@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
+import starFilled from '../assets/star-filled.png';
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -110,7 +111,7 @@ const ProfilePage = () => {
                                                         ...b.movie,
                                                         id: b.movie.tmdbId // MovieCard expects tmdbId or id
                                                     }} />
-                                                    {b.isFavorite && <div className="favorite-badge">⭐</div>}
+                                                    {b.isFavorite && <div className="favorite-badge"><img src={starFilled} alt="favourite" className="star-icon-img" /></div>}
                                                 </div>
                                             ))}
                                         </div>
@@ -129,7 +130,10 @@ const ProfilePage = () => {
                             reviews.map(r => (
                                 <div key={r.id} className="review-card">
                                     <h3>Movie ID: {r.movieId}</h3>
-                                    <div className="rating">⭐ {r.rating}/10</div>
+                                    <div className="rating">
+                                        <img src={starFilled} alt="star" className="star-icon-img" />
+                                        {r.rating}/10
+                                    </div>
                                     <p>{r.content}</p>
                                     <div className="actions">
                                         <button onClick={() => alert("Edit not implemented")}>Edit</button>

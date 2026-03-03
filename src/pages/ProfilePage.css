@@ -118,9 +118,21 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    font-size: 1.2rem;
     pointer-events: none;
     border: 1px solid #ffd700;
+}
+
+.star-icon-img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #ffd700;
 }
 
 .no-data {

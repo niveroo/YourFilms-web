@@ -73,6 +73,13 @@
     margin-bottom: 2rem;
     font-size: 1.1rem;
     color: #ffd700;
+    align-items: center;
+}
+
+.star-icon-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
 }
 
 .genres {

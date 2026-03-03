@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import '../styles/MovieCard.css';
+import starFilled from '../assets/star-filled.png';
 
 const MovieCard = ({ media }) => {
     const navigate = useNavigate();
@@ -21,7 +22,10 @@ const MovieCard = ({ media }) => {
                 <h3>{media.title || media.name}</h3>
                 <div className="card-meta">
                     <span>{new Date(media.releaseDate || media.firstAirDate).getFullYear() || 'N/A'}</span>
-                    <span className="rating">⭐ {media.voteAverage?.toFixed(1)}</span>
+                    <span className="rating">
+                        <img src={starFilled} alt="star" className="star-icon-img" />
+                        {media.voteAverage?.toFixed(1)}
+                    </span>
                 </div>
             </div>
         </div>

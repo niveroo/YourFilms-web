@@ -82,4 +82,13 @@
 
 .rating {
     color: #ffc107;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.star-icon-img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
 }
