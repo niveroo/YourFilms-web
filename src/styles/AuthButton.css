@@ -1,4 +1,48 @@
-.auth-button {
+.auth-container {
     display: flex;
-    gap: 0.5em;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.username-link {
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.username-link:hover {
+    color: #ff3366;
+    /* Matching the brand highlight */
+}
+
+.auth-container button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.login-btn {
+    background: linear-gradient(45deg, #ff3366, #ff6b3d);
+    color: #fff;
+}
+
+.login-btn:hover {
+    box-shadow: 0 2px 8px rgba(255, 51, 102, 0.4);
+    transform: translateY(-1px);
+}
+
+.logout-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
 }

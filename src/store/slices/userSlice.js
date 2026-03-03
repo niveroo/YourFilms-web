@@ -76,8 +76,7 @@ const userSlice = createSlice({
                 state.user = action.payload.user;
                 state.isLoggedIn = true;
                 state.loading = false;
-                localStorage.setItem('token', action.payload.token); // Store token
-                console.log(API.getToken())
+                API.setToken(action.payload.token); // Store token via cookie
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;

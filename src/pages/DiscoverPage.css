@@ -10,6 +10,9 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .discover-page .section-title {
@@ -52,6 +55,8 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 2rem;
     padding-bottom: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .discover-page .no-results {

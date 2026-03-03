@@ -1,0 +1,128 @@
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 420px;
+    width: 100%;
+    margin: 50px auto;
+    border-radius: 16px;
+    background-color: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1rem;
+    padding: 2.5rem 2rem;
+    gap: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+.auth-title {
+    margin: 0;
+    font-size: 2rem;
+    text-align: center;
+    background: linear-gradient(45deg, #ff3366, #ff6b3d);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #aaa;
+}
+
+.input-group input {
+    width: 100%;
+    /* Keep inputs inside container */
+    box-sizing: border-box;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #ff3366;
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.2);
+}
+
+.error-text {
+    color: #ff4444;
+    font-size: 0.9rem;
+    margin: -0.5rem 0 0 0;
+    text-align: center;
+}
+
+.checkbox-class {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.checkbox-class input[type="checkbox"] {
+    accent-color: #ff3366;
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+
+.checkbox-class label {
+    font-size: 0.9rem;
+    color: #bbb;
+    cursor: pointer;
+}
+
+.submit-btn {
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(45deg, #ff3366, #ff6b3d);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+}
+
+.toggle-link {
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.toggle-link:hover {
+    color: #fff;
+}

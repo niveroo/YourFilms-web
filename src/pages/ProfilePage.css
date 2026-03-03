@@ -86,19 +86,50 @@
     gap: 2rem;
 }
 
-.bookmark-item {
-    position: relative;
+.category-section {
+    margin-bottom: 3rem;
 }
 
-.bookmark-category {
+.category-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+    color: #ff3366;
+}
+
+.bookmark-item {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.bookmark-item:hover {
+    transform: translateY(-5px);
+}
+
+.favorite-badge {
     position: absolute;
     top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    color: #ffd700;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    pointer-events: none;
+    border: 1px solid #ffd700;
+}
+
+.no-data {
+    text-align: center;
+    padding: 3rem;
+    color: #888;
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
 }
 
 .reviews-list .review-card {

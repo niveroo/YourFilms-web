@@ -94,23 +94,31 @@ const ProfilePage = () => {
 
             <div className="profile-content">
                 {activeTab === 'bookmarks' && (
-                    <div className="bookmarks-grid">
+                    <div className="bookmarks-container">
                         {bookmarks.length > 0 ? (
-                            bookmarks.map(b => (
-                                <div key={b.id} className="bookmark-item">
-                                    {/* Use MovieCard if b contains full movie data, otherwise simple card */}
-                                    {/* Assuming bookmark returns some movie info */}
-                                    <MovieCard media={{
-                                        id: b.movieId || b.tmdbId,
-                                        title: b.title, // If available
-                                        posterPath: b.posterPath, // If available
-                                        voteAverage: 0 // Placeholder
-                                    }} />
-                                    <span className="bookmark-category">{b.category}</span>
-                                </div>
-                            ))
+                            ['wishlist', 'watching', 'watched', 'dropped'].map(category => {
+                                const filteredBookmarks = bookmarks.filter(b => b.category === category);
+                                if (filteredBookmarks.length === 0) return null;
+
+                                return (
+                                    <section key={category} className="category-section">
+                                        <h2 className="category-title">{category.charAt(0).toUpperCase() + category.slice(1)}</h2>
+                                        <div className="bookmarks-grid">
+                                            {filteredBookmarks.map(b => (
+                                                <div key={b.id} className="bookmark-item">
+                                                    <MovieCard media={{
+                                                        ...b.movie,
+                                                        id: b.movie.tmdbId // MovieCard expects tmdbId or id
+                                                    }} />
+                                                    {b.isFavorite && <div className="favorite-badge">⭐</div>}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                );
+                            })
                         ) : (
-                            <p>No bookmarks yet.</p>
+                            <p className="no-data">No bookmarks yet.</p>
                         )}
                     </div>
                 )}

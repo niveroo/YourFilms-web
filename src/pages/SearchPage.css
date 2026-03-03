@@ -5,11 +5,18 @@
     color: #fff;
 }
 
+.search-page .section-title {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+}
+
 .search-page .movies-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 2rem;
     padding-bottom: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .search-page .no-results {

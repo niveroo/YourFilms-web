@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 class API {
 	static baseURL = "http://localhost:5000";
 
@@ -6,15 +8,15 @@ class API {
 	}
 
 	static getToken() {
-		return localStorage.getItem("token");
+		return Cookies.get("token");
 	}
 
 	static setToken(token) {
-		localStorage.setItem("token", token);
+		Cookies.set("token", token, { expires: 7, secure: true, sameSite: 'Strict' });
 	}
 
 	static clearToken() {
-		localStorage.removeItem("token");
+		Cookies.remove("token");
 	}
 
 	static async request(method, route, body) {
@@ -114,25 +116,83 @@ class API {
 	}
 
 	static async getBookmarks() {
-		return this.request("GET", "/api/Bookmarks/user/me");
+		const res = await this.request("GET", "/api/Bookmarks/user/me");
+		if (Array.isArray(res)) {
+			res.forEach(b => {
+				if (b.category !== undefined) {
+					b.category = this.mapEnumToCategory(b.category);
+				}
+			});
+		}
+		return res;
+	}
+
+	static mapEnumToCategory(val) {
+		if (typeof val === 'string') {
+			const lower = val.toLowerCase();
+			if (lower === 'watchlist') return 'wishlist';
+			return lower;
+		}
+		const reverseMap = {
+			0: 'wishlist',
+			1: 'watching',
+			2: 'watched',
+			3: 'dropped'
+		};
+		return reverseMap[val] !== undefined ? reverseMap[val] : 'none';
+	}
+
+	// Helper to map UI string labels to C# BookmarkCategory Enum Integers
+	// We assume: Wishlist = 0, Watching = 1, Watched = 2, Dropped = 3
+	// Ensure the string values here match the strings used inside BookmarkMenu.jsx
+	static mapCategoryToEnum(categoryString) {
+		const categoryMap = {
+			'wishlist': 0,
+			'watching': 1,
+			'watched': 2,
+			'dropped': 3
+		};
+		// If unknown or empty, we generally fall back to Wishlist or whatever your default is
+		return categoryMap[categoryString] !== undefined ? categoryMap[categoryString] : 0;
 	}
 
 	static async addBookmark(data) {
-		// data: { tmdbId, mediaType, isFavorite, category }
-		return this.request("POST", "/api/Bookmarks", data);
+		// DTO: { tmdbId, mediaType, isFavorite, category }
+		const payload = {
+			tmdbId: data.tmdbId,
+			mediaType: data.mediaType,
+			isFavorite: data.isFavorite,
+			category: this.mapCategoryToEnum(data.category)
+		};
+		return this.request("POST", "/api/Bookmarks/Add", payload);
 	}
 
 	static async removeBookmark(bookmarkId) {
-		return this.request("DELETE", `/api/Bookmarks/${bookmarkId}`);
+		return this.request("DELETE", `/api/Bookmarks/Delete/${bookmarkId}`);
 	}
 
-	static async updateBookmark(bookmarkId, data) {
-		// data: { bookmarkId, isFavorite, category }
-		return this.request("PUT", `/api/Bookmarks/${bookmarkId}`, data);
+	static async updateBookmark(data) {
+		// DTO: { bookmarkId, isFavorite, category }
+		const payload = {
+			bookmarkId: data.bookmarkId,
+			isFavorite: data.isFavorite,
+			category: this.mapCategoryToEnum(data.category)
+		};
+		return this.request("POST", `/api/Bookmarks/Update/${data.bookmarkId}`, payload);
 	}
 
 	static async checkBookmark(tmdbId, mediaType) {
-		return this.request("GET", `/api/Bookmarks/check?tmdbId=${tmdbId}&mediaType=${mediaType}`);
+		try {
+			const res = await this.request("GET", `/api/Bookmarks/check?tmdbId=${tmdbId}&mediaType=${mediaType}`);
+			if (res && res.isBookmarked && res.bookmark) {
+				res.bookmark.category = this.mapEnumToCategory(res.bookmark.category);
+				return res.bookmark;
+			}
+			return null;
+		} catch (error) {
+			// Catch 404s cleanly instead of throwing unhandled exceptions
+			return null;
+		}
 	}
 
 	static async getReviews(tmdbId, mediaType) {
@@ -145,16 +205,16 @@ class API {
 
 	static async addReview(data) {
 		// data: { tmdbId, mediaType, rating, content }
-		return this.request("POST", "/api/Reviews", data);
+		return this.request("POST", "/api/Reviews/Add", data);
 	}
 
 	static async deleteReview(reviewId) {
-		return this.request("DELETE", `/api/Reviews/${reviewId}`);
+		return this.request("DELETE", `/api/Reviews/Delete/${reviewId}`);
 	}
 
 	static async updateReview(reviewId, data) {
 		// data: { reviewId, rating, content }
-		return this.request("PUT", `/api/Reviews/${reviewId}`, data);
+		return this.request("POST", `/api/Reviews/Update/${reviewId}`, data);
 	}
 }
 

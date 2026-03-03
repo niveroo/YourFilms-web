@@ -16,9 +16,6 @@ const MovieCard = ({ media }) => {
         <div className="movie-card" onClick={handleClick}>
             <div className="card-image-container">
                 <img src={imageUrl} alt={media.title || media.name} loading="lazy" />
-                <div className="card-overlay">
-                    <button className="card-btn">Details</button>
-                </div>
             </div>
             <div className="card-info">
                 <h3>{media.title || media.name}</h3>

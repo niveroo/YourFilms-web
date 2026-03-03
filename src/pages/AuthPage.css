@@ -1,0 +1,10 @@
+.auth-page {
+    position: relative;
+    min-height: calc(100vh - 80px);
+    /* Account for banner */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    overflow: hidden;
+}

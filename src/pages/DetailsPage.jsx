@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import API from '../services/API';
+import BookmarkMenu from '../components/BookmarkMenu';
 import './DetailsPage.css';
 
 const DetailsPage = () => {
+    const { isLoggedIn } = useSelector((state) => state.user);
     const { type, id } = useParams();
     const [details, setDetails] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -11,7 +14,7 @@ const DetailsPage = () => {
     const [bookmarkStatus, setBookmarkStatus] = useState({}); // { isBookmarked: false, category: '' }
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDetailsAndReviews = async () => {
             setLoading(true);
             try {
                 // Fetch Details
@@ -26,10 +29,6 @@ const DetailsPage = () => {
                 // Fetch Reviews
                 const reviewsData = await API.getReviews(id, type);
                 setReviews(reviewsData || []);
-
-                // Check Bookmark
-                const bookmarkData = await API.checkBookmark(id, type);
-                setBookmarkStatus(bookmarkData || {});
             } catch (error) {
                 console.error("Failed to fetch details:", error);
             } finally {
@@ -37,23 +36,64 @@ const DetailsPage = () => {
             }
         };
 
-        fetchData();
+        fetchDetailsAndReviews();
     }, [type, id]);
 
-    const handleBookmark = async (category) => {
+    // Independent effect to fetch bookmark status whenever auth state changes
+    useEffect(() => {
+        const fetchBookmark = async () => {
+            if (isLoggedIn) {
+                try {
+                    const bookmarkData = await API.checkBookmark(id, type);
+                    setBookmarkStatus(bookmarkData || {});
+                } catch (e) {
+                    console.error("User bookmark check failed", e);
+                }
+            } else {
+                setBookmarkStatus({});
+            }
+        };
+
+        fetchBookmark();
+    }, [type, id, isLoggedIn]);
+
+    const handleSaveBookmark = async (newStatus) => {
         try {
-            await API.addBookmark({
-                tmdbId: details.id, // TMDb ID
-                mediaType: type,
-                isFavorite: category === 'favorite',
-                category: category
-            });
-            // Refresh status
+            const activeId = bookmarkStatus.id || bookmarkStatus.bookmarkId;
+
+            // 1. Handle Removal
+            if (!newStatus.category) {
+                if (activeId) {
+                    await API.removeBookmark(activeId);
+                    setBookmarkStatus({});
+                }
+                return;
+            }
+
+            // 2. Handle Add/Update
+            if (activeId) {
+                // Update existing
+                await API.updateBookmark({
+                    bookmarkId: activeId,
+                    isFavorite: newStatus.isFavorite,
+                    category: newStatus.category
+                });
+            } else {
+                // Add new
+                await API.addBookmark({
+                    tmdbId: details.id,
+                    mediaType: type,
+                    isFavorite: newStatus.isFavorite,
+                    category: newStatus.category
+                });
+            }
+
+            // Refresh status from server to ensure sync
             const bookmarkData = await API.checkBookmark(id, type);
             setBookmarkStatus(bookmarkData || {});
         } catch (error) {
-            console.error("Failed to bookmark:", error);
-            alert("Failed to add bookmark. Are you logged in?");
+            console.error("Failed to save bookmark changes:", error);
+            alert("Failed to save changes. Please try again.");
         }
     };
 
@@ -80,14 +120,11 @@ const DetailsPage = () => {
             <div className="content-container">
                 <div className="poster-section">
                     <img src={posterUrl} alt={details.title || details.name} />
-                    <div className="actions">
-                        <button onClick={() => handleBookmark('wishlist')}>Want to Watch</button>
-                        <button onClick={() => handleBookmark('watching')}>Watching</button>
-                        <button onClick={() => handleBookmark('watched')}>Watched</button>
-                        <button onClick={() => handleBookmark('favorite')} className="favorite">
-                            {bookmarkStatus.isFavorite ? '❤️ In Favorites' : '♡ Add to Favorites'}
-                        </button>
-                    </div>
+                    <BookmarkMenu
+                        bookmarkStatus={bookmarkStatus}
+                        isLoggedIn={isLoggedIn}
+                        onSave={handleSaveBookmark}
+                    />
                 </div>
 
                 <div className="info-section">
