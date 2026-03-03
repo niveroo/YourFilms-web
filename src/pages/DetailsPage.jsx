@@ -164,8 +164,8 @@ const DetailsPage = () => {
                         <div className="seasons-section">
                             <h2>Seasons</h2>
                             <div className="seasons-list">
-                                {details.seasons.map(season => (
-                                    <div key={season.id} className="season-card">
+                                {details.seasons.map((season, index) => (
+                                    <div key={`${season.id}-${index}`} className="season-card">
                                         <div className="season-poster">
                                             <img
                                                 src={season.posterPath ? `https://image.tmdb.org/t/p/w200${season.posterPath}` : 'https://via.placeholder.com/200x300?text=No+Image'}
@@ -202,8 +202,8 @@ const DetailsPage = () => {
                 <h2>Reviews</h2>
                 {reviews.length > 0 ? (
                     <div className="reviews-list">
-                        {reviews.map(review => (
-                            <div key={review.id} className="review-card">
+                        {reviews.map((review, index) => (
+                            <div key={`${review.id}-${index}`} className="review-card">
                                 <div className="review-header">
                                     <span className="user">{review.userId}</span>
                                     <span className="rating">
