@@ -196,11 +196,11 @@ class API {
 	}
 
 	static async getReviews(tmdbId, mediaType) {
-		return this.request("GET", `/api/Reviews/media?tmdbId=${tmdbId}&mediaType=${mediaType}`);
+		return this.request("GET", `/api/Reviews/media/?tmdbId=${tmdbId}&mediaType=${mediaType}`);
 	}
 
 	static async getUserReviews() {
-		return this.request("GET", "/api/Reviews/user");
+		return this.request("GET", "/api/Reviews/user/");
 	}
 
 	static async addReview(data) {
@@ -209,11 +209,11 @@ class API {
 	}
 
 	static async deleteReview(reviewId) {
-		return this.request("DELETE", `/api/Reviews/Delete/${reviewId}`);
+		return this.request("DELETE", `/api/Reviews/Delete${reviewId}`);
 	}
 
 	static async updateReview(reviewId, data) {
-		// data: { reviewId, rating, content }
+		// data: { rating, content, etc }
 		return this.request("POST", `/api/Reviews/Update/${reviewId}`, data);
 	}
 }
