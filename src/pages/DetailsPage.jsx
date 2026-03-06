@@ -175,15 +175,16 @@ const DetailsPage = () => {
     const runtime = details.runtime || details.episodeRunTime?.[0];
 
     // Check if user has already reviewed
-    // Match by ID or Username for robust detection
-    const userReview = reviews.find(r =>
-        (r.userId !== undefined && r.userId === user?.id) ||
-        (r.username !== undefined && user?.username !== undefined && r.username === user.username)
-    );
-    const otherReviews = reviews.filter(r =>
-        !((r.userId !== undefined && r.userId === user?.id) ||
-            (r.username !== undefined && user?.username !== undefined && r.username === user.username))
-    );
+    // Match by nested user info or direct properties for robust detection
+    const userReview = reviews.find(r => {
+        if (!user) return false;
+        const rUserId = r.user?.id || r.userId;
+        const rUsername = r.user?.username || r.username;
+        return (rUserId !== undefined && rUserId === user.id) ||
+            (rUsername !== undefined && user.username !== undefined && rUsername === user.username);
+    });
+
+    const otherReviews = reviews.filter(r => r.id !== userReview?.id);
 
     return (
         <div className="details-page">
@@ -299,9 +300,9 @@ const DetailsPage = () => {
                         </div>
                     )}
 
-                    {otherReviews.length > 0 ? (
+                    {otherReviews.length > 0 && (
                         <div className="other-reviews-section">
-                            {userReview && <h3 className="section-label">Other Reviews</h3>}
+                            <h3 className="section-label">Other Reviews</h3>
                             {otherReviews.map((review, index) => (
                                 <ReviewItem
                                     key={`${review.id}-${index}`}
@@ -310,8 +311,14 @@ const DetailsPage = () => {
                                 />
                             ))}
                         </div>
-                    ) : (
-                        !userReview && <p className="no-reviews">No reviews yet. Be the first to review!</p>
+                    )}
+
+                    {!userReview && otherReviews.length === 0 && (
+                        <p className="no-reviews">No reviews yet. Be the first to review!</p>
+                    )}
+
+                    {userReview && otherReviews.length === 0 && (
+                        <p className="no-other-reviews">No other reviews yet.</p>
                     )}
                 </div>
             </div>

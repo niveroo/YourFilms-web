@@ -26,7 +26,7 @@ const ReviewItem = ({ review, isOwnReview, onUpdate, onDelete, isSubmitting }) =
             <div className="review-header">
                 <div className="user-info">
                     <span className="username">
-                        {isOwnReview ? 'You' : (review.username || `User #${review.userId}`)}
+                        {isOwnReview ? 'You' : (review.user?.username || review.username || `User #${review.userId}`)}
                     </span>
                 </div>
                 <div className="rating">

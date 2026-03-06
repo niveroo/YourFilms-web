@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import API from '../services/API';
-import MovieCard from '../components/MovieCard';
+import BookmarkMovieCard from '../components/BookmarkMovieCard';
+import ReviewMovieCard from '../components/ReviewMovieCard';
+
+import ReviewForm from '../components/ReviewForm';
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
-import starFilled from '../assets/star-filled.png';
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -13,30 +15,44 @@ const ProfilePage = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('bookmarks'); // 'bookmarks' | 'reviews'
+    const [activeCategory, setActiveCategory] = useState('all');
+    const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+
+    // Inline editing state for reviews
+    const [editingReviewId, setEditingReviewId] = useState(null);
+    const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const categories = [
+        { id: 'all', label: 'All' },
+        { id: 'wishlist', label: 'Want to watch' },
+        { id: 'watching', label: 'Watching' },
+        { id: 'watched', label: 'Watched' },
+        { id: 'dropped', label: 'Dropped' }
+    ];
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const userData = await API.getUserData();
+            setUser(userData);
+
+            const bookmarksData = await API.getBookmarks();
+            setBookmarks(bookmarksData || []);
+
+            const reviewsData = await API.getUserReviews();
+            setReviews(reviewsData || []);
+        } catch (error) {
+            console.error("Failed to fetch profile data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const userData = await API.getUserData();
-                setUser(userData);
-
-                const bookmarksData = await API.getBookmarks('me');
-                setBookmarks(bookmarksData || []);
-
-                const reviewsData = await API.getUserReviews();
-                setReviews(reviewsData || []);
-            } catch (error) {
-                console.error("Failed to fetch profile data:", error);
-                // navigate('/login'); // Redirect if not logged in?
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
     }, []);
 
@@ -46,107 +62,186 @@ const ProfilePage = () => {
     };
 
     const handleDeleteAccount = async () => {
-        if (window.confirm("Are you sure you want to delete your account? This cannot be undone.")) {
+        if (window.confirm("Are you sure you want to delete your account? This action is irreversible.")) {
+            alert("Account deletion is not implemented yet.");
+        }
+    };
+
+    const handleBookmarkStatusChange = async (b, newStatus) => {
+        try {
+            if (!newStatus.category) {
+                // Delete
+                await API.removeBookmark(b.id);
+                setBookmarks(prev => prev.filter(item => item.id !== b.id));
+            } else {
+                // Update
+                await API.updateBookmark({
+                    bookmarkId: b.id,
+                    isFavorite: newStatus.isFavorite,
+                    category: newStatus.category
+                });
+                // Update local state directly
+                setBookmarks(prev => prev.map(item => item.id === b.id ? { ...item, category: newStatus.category, isFavorite: newStatus.isFavorite } : item));
+            }
+        } catch (error) {
+            console.error("Failed to update bookmark:", error);
+            alert("Failed to save changes. Please try again.");
+            // Re-trigger re-render to pass original status back down on failure
+            setBookmarks(prev => [...prev]);
+        }
+    };
+
+
+    const handleDeleteReview = async (id) => {
+        if (window.confirm("Delete this review?")) {
             try {
-                // Assuming there is an API for this, though not explicitly in the list of used endpoints for profile page in requirements
-                // Requirements say: "Przyciski: edycja profilu, wylogowanie, usuwanie konta"
-                // But endpoint list only shows GETs and PUT/DELETE reviews/bookmarks.
-                // I'll leave it as a placeholder or try DELETE /api/user/me if exists.
-                alert("Account deletion not fully implemented in frontend yet.");
+                await API.deleteReview(id);
+                setReviews(prev => prev.filter(r => r.id !== id));
             } catch (error) {
-                console.error("Delete account failed:", error);
+                alert("Failed to delete review");
             }
         }
     };
 
-    if (loading) return <div className="loading">Loading...</div>;
+    const handleEditReview = (r) => {
+        setEditingReviewId(r.id);
+    };
+
+    const handleUpdateReview = async (id, data) => {
+        setIsSubmittingReview(true);
+        try {
+            await API.updateReview(id, data);
+            setReviews(prev => prev.map(r => r.id === id ? { ...r, rating: data.rating, content: data.content } : r));
+            setEditingReviewId(null);
+        } catch (error) {
+            console.error("Failed to update review", error);
+            alert("Failed to update review.");
+        } finally {
+            setIsSubmittingReview(false);
+        }
+    };
+
+    const filteredBookmarks = bookmarks.filter(b => {
+        if (activeCategory !== 'all' && b.category !== activeCategory) return false;
+        if (showOnlyFavorites && !b.isFavorite) return false;
+        return true;
+    });
+
+    if (loading) return <div className="loading">Loading Profile...</div>;
 
     return (
         <div className="profile-page">
-            <div className="profile-header">
-                <h1>User Profile</h1>
-                {user && (
-                    <div className="user-info">
-                        <p><strong>Email:</strong> {user.email || user.username}</p>
-                        <p><strong>Joined:</strong> {new Date(user.createdAt || Date.now()).toLocaleDateString()}</p>
+            <header className="profile-header">
+                <div className="user-info">
+                    <h1>{user?.username || 'User Profile'}</h1>
+                    <div className="user-details">
+                        <span>{user?.email}</span>
+                        <span>Joined: {new Date(user?.createdAt).toLocaleDateString()}</span>
                     </div>
-                )}
-                <div className="profile-actions">
-                    <button onClick={() => alert("Edit Profile not implemented")}>Edit Profile</button>
-                    <button onClick={handleLogout}>Logout</button>
-                    <button onClick={handleDeleteAccount} className="danger">Delete Account</button>
                 </div>
-            </div>
+                <div className="profile-actions">
+                    <button className="profile-btn" onClick={() => navigate('/edit-profile')}>Edit Profile</button>
+                    <button className="profile-btn" onClick={handleLogout}>Logout</button>
+                    <button className="profile-btn danger" onClick={handleDeleteAccount}>Delete Account</button>
+                </div>
+            </header>
 
-            <div className="profile-tabs">
+            <div className="main-tabs">
                 <button
-                    className={activeTab === 'bookmarks' ? 'active' : ''}
+                    className={`main-tab ${activeTab === 'bookmarks' ? 'active' : ''}`}
                     onClick={() => setActiveTab('bookmarks')}
                 >
-                    Bookmarks
+                    Bookmarks ({bookmarks.length})
                 </button>
                 <button
-                    className={activeTab === 'reviews' ? 'active' : ''}
+                    className={`main-tab ${activeTab === 'reviews' ? 'active' : ''}`}
                     onClick={() => setActiveTab('reviews')}
                 >
-                    Reviews
+                    Reviews ({reviews.length})
                 </button>
             </div>
 
-            <div className="profile-content">
+            <main className="profile-content">
                 {activeTab === 'bookmarks' && (
-                    <div className="bookmarks-container">
-                        {bookmarks.length > 0 ? (
-                            ['wishlist', 'watching', 'watched', 'dropped'].map(category => {
-                                const filteredBookmarks = bookmarks.filter(b => b.category === category);
-                                if (filteredBookmarks.length === 0) return null;
+                    <>
+                        <div className="content-filters">
+                            <div className="category-tabs">
+                                {categories.map(cat => (
+                                    <button
+                                        key={cat.id}
+                                        className={`cat-tab ${activeCategory === cat.id ? 'active' : ''}`}
+                                        onClick={() => setActiveCategory(cat.id)}
+                                    >
+                                        {cat.label}
+                                    </button>
+                                ))}
+                            </div>
+                            <label className="favorite-filter">
+                                <input
+                                    type="checkbox"
+                                    checked={showOnlyFavorites}
+                                    onChange={(e) => setShowOnlyFavorites(e.target.checked)}
+                                />
+                                Only Favorite
+                            </label>
+                        </div>
 
-                                return (
-                                    <section key={category} className="category-section">
-                                        <h2 className="category-title">{category.charAt(0).toUpperCase() + category.slice(1)}</h2>
-                                        <div className="bookmarks-grid">
-                                            {filteredBookmarks.map(b => (
-                                                <div key={b.id} className="bookmark-item">
-                                                    <MovieCard media={{
-                                                        ...b.movie,
-                                                        id: b.movie.tmdbId // MovieCard expects tmdbId or id
-                                                    }} />
-                                                    {b.isFavorite && <div className="favorite-badge"><img src={starFilled} alt="favourite" className="star-icon-img" /></div>}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </section>
-                                );
-                            })
+                        {filteredBookmarks.length > 0 ? (
+                            <div className="profile-grid">
+                                {filteredBookmarks.map(b => (
+                                    <BookmarkMovieCard
+                                        key={b.id}
+                                        movie={{
+                                            ...b.movie,
+                                            id: b.movie.tmdbId,
+                                        }}
+                                        onStatusChange={(newStatus) => handleBookmarkStatusChange(b, newStatus)}
+                                        category={b.category}
+                                        isFavorite={b.isFavorite}
+                                    />
+                                ))}
+                            </div>
                         ) : (
-                            <p className="no-data">No bookmarks yet.</p>
+                            <div className="no-data">No bookmarks found in this category.</div>
                         )}
-                    </div>
+                    </>
                 )}
 
                 {activeTab === 'reviews' && (
-                    <div className="reviews-list">
+                    <div className="stretched-list">
                         {reviews.length > 0 ? (
                             reviews.map(r => (
-                                <div key={r.id} className="review-card">
-                                    <h3>Movie ID: {r.movieId}</h3>
-                                    <div className="rating">
-                                        <img src={starFilled} alt="star" className="star-icon-img" />
-                                        {r.rating}/10
-                                    </div>
-                                    <p>{r.content}</p>
-                                    <div className="actions">
-                                        <button onClick={() => alert("Edit not implemented")}>Edit</button>
-                                        <button onClick={() => alert("Delete not implemented")}>Delete</button>
-                                    </div>
-                                </div>
+                                <ReviewMovieCard
+                                    key={r.id}
+                                    movie={{
+                                        ...r.movie,
+                                        id: r.movie?.tmdbId,
+                                        rating: r.rating
+                                    }}
+                                    isEditing={editingReviewId === r.id}
+                                    onEdit={() => handleEditReview(r)}
+                                    onDelete={() => handleDeleteReview(r.id)}
+                                >
+                                    {editingReviewId === r.id ? (
+                                        <div className="inline-review-form-wrapper" style={{ marginTop: '10px' }}>
+                                            <ReviewForm
+                                                initialData={{ rating: r.rating, content: r.content }}
+                                                onSubmit={(data) => handleUpdateReview(r.id, data)}
+                                                onCancel={() => setEditingReviewId(null)}
+                                                isSubmitting={isSubmittingReview}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <p className="rmc-review-text">{r.content}</p>
+                                    )}
+                                </ReviewMovieCard>
                             ))
                         ) : (
-                            <p>No reviews yet.</p>
+                            <div className="no-data">You haven't written any reviews yet.</div>
                         )}
                     </div>
                 )}
-            </div>
+            </main>
         </div>
     );
 };

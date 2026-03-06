@@ -28,16 +28,19 @@ const ReviewForm = ({ initialData, onSubmit, onCancel, isSubmitting }) => {
 
                 <div className="rating-input">
                     <label>Rating:</label>
-                    <div className="rating-selector">
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                            <span
-                                key={num}
-                                className={`star-radio ${num <= rating ? 'active' : ''}`}
-                                onClick={() => setRating(num)}
-                            >
-                                ★
-                            </span>
-                        ))}
+                    <div className="expanding-rating-selector">
+                        <div className="stars-wrapper">
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                                <span
+                                    key={num}
+                                    className={`star-radio ${num <= rating ? 'active' : ''}`}
+                                    onClick={() => setRating(num)}
+                                    title={`${num}/10`}
+                                >
+                                    ★
+                                </span>
+                            ))}
+                        </div>
                         <span className="rating-number">{rating}/10</span>
                     </div>
                 </div>

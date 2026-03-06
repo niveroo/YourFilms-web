@@ -1,0 +1,125 @@
+.profile-movie-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.profile-movie-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.bmc-image-container {
+    width: 100%;
+    aspect-ratio: 2/3;
+    cursor: pointer;
+    overflow: hidden;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+
+.bmc-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.profile-movie-card:hover .bmc-image-container img {
+    transform: scale(1.05);
+}
+
+.bmc-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+}
+
+.bmc-main-info {
+    cursor: pointer;
+}
+
+.bmc-title {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bmc-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bmc-year {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.bmc-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffc107;
+}
+
+.bmc-content {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.bmc-footer {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Overrides for BookmarkMenu when inside the card */
+.profile-movie-card .bookmark-menu-container {
+    width: 100%;
+    margin-top: 0;
+}
+
+.profile-movie-card .bookmark-main-btn {
+    padding: 4px 8px;
+    font-size: 0.85rem;
+    height: 30px;
+}
+
+.profile-movie-card .current-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-movie-card .delete-bookmark-btn {
+    height: 24px;
+}
+
+.profile-movie-card .bookmark-menu-container:hover .delete-bookmark-btn {
+    width: 30px;
+}

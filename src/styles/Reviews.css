@@ -147,24 +147,61 @@
     color: #aaa;
 }
 
-.rating-selector {
+.expanding-rating-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    line-height: 1;
+}
+
+.expanding-rating-selector:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.stars-wrapper {
     display: flex;
+    align-items: center;
+    width: 24px;
+    /* Slightly wider to prevent clipping */
+    overflow: hidden;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     gap: 4px;
+    white-space: nowrap;
+}
+
+.expanding-rating-selector:hover .stars-wrapper {
+    width: fit-content;
+    /* Adjusted for 10 stars + gaps */
 }
 
 .star-radio {
     cursor: pointer;
-    font-size: 1.5rem;
-    color: #333;
-    transition: color 0.2s, transform 0.1s;
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.15);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 .star-radio.active {
     color: #ffc107;
+    text-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
 }
 
 .star-radio:hover {
-    transform: scale(1.2);
+    transform: scale(1.3);
+    color: #ffdb70;
 }
 
 .content-input textarea {

@@ -1,153 +1,215 @@
 .profile-page {
-    padding: 2rem;
+    padding: 80px 5% 40px;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #141414, #000000);
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
     color: #fff;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .profile-header {
+    margin-bottom: 40px;
     background: rgba(255, 255, 255, 0.05);
-    padding: 2rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-.user-info p {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+.user-info h1 {
+    font-size: 2.5rem;
+    margin: 0 0 10px;
+    background: linear-gradient(to right, #fff, #a5a5a5);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.user-details {
+    display: flex;
+    gap: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
 }
 
 .profile-actions {
-    margin-top: 1.5rem;
     display: flex;
     gap: 15px;
 }
 
-.profile-actions button {
-    padding: 10px 20px;
+.profile-btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    border-radius: 5px;
+    color: #fff;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
 }
 
-.profile-actions button:hover {
+.profile-btn:hover {
     background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 
-.profile-actions button.danger {
-    background: rgba(255, 0, 0, 0.2);
-    border-color: rgba(255, 0, 0, 0.3);
+.profile-btn.danger {
+    background: rgba(220, 53, 69, 0.2);
+    border-color: rgba(220, 53, 69, 0.3);
 }
 
-.profile-actions button.danger:hover {
-    background: rgba(255, 0, 0, 0.4);
+.profile-btn.danger:hover {
+    background: rgba(220, 53, 69, 0.4);
 }
 
-.profile-tabs {
+.main-tabs {
     display: flex;
-    gap: 20px;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 10px;
+    margin-bottom: 30px;
 }
 
-.profile-tabs button {
+.main-tab {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
     background: none;
     border: none;
-    color: #888;
-    padding: 10px 20px;
-    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.5);
     cursor: pointer;
     position: relative;
+    transition: color 0.3s ease;
 }
 
-.profile-tabs button.active {
+.main-tab.active {
     color: #fff;
 }
 
-.profile-tabs button.active::after {
+.main-tab.active::after {
     content: '';
     position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #ff3366;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: #e50914;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(229, 9, 20, 0.6);
 }
 
-.bookmarks-grid {
+.content-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.category-tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.cat-tab {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cat-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cat-tab.active {
+    background: #e50914;
+    border-color: #e50914;
+    color: #fff;
+}
+
+.favorite-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.favorite-filter input {
+    cursor: pointer;
+    accent-color: #e50914;
+}
+
+.profile-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 2rem;
+    gap: 24px;
+    margin-top: 20px;
+    width: 100%;
 }
 
-.category-section {
-    margin-bottom: 3rem;
-}
-
-.category-title {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
-    color: #ff3366;
-}
-
-.bookmark-item {
-    position: relative;
-    transition: transform 0.3s ease;
-}
-
-.bookmark-item:hover {
-    transform: translateY(-5px);
-}
-
-.favorite-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    width: 32px;
-    height: 32px;
+.stretched-list {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    pointer-events: none;
-    border: 1px solid #ffd700;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+    width: 100%;
 }
 
-.star-icon-img {
-    width: 16px;
-    height: 16px;
-    object-fit: contain;
+@media (max-width: 600px) {
+    .profile-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 16px;
+    }
 }
 
-.rating {
+.review-body {
+    margin-top: 10px;
+}
+
+.review-text {
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.84);
+    margin-bottom: 20px;
+}
+
+.review-btns {
     display: flex;
-    align-items: center;
-    gap: 4px;
-    color: #ffd700;
+    gap: 15px;
+}
+
+.profile-btn.small {
+    padding: 8px 16px;
+    font-size: 0.85rem;
 }
 
 .no-data {
     text-align: center;
-    padding: 3rem;
-    color: #888;
-    font-size: 1.1rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
+    padding: 100px 0;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 1.2rem;
 }
 
-.reviews-list .review-card {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 1.5rem;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .content-filters {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
 }
