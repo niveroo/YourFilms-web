@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../styles/BookmarkMenu.css';
 import starFilled from '../assets/star-filled.png';
 import starEmpty from '../assets/star-empty.png';
-import trashIcon from '../assets/white-bin.png';
+import trashIcon from '../assets/bin.png';
 
 const BookmarkMenu = ({ bookmarkStatus, isLoggedIn, onSave }) => {
     const [localStatus, setLocalStatus] = useState({

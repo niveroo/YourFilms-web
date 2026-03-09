@@ -30,7 +30,7 @@
     z-index: 1;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20vh 2rem 4rem;
+    padding: 10vh 2rem 2rem;
     display: flex;
     gap: 3rem;
     align-items: flex-start;
@@ -50,7 +50,7 @@
 
 .info-section {
     flex: 1;
-    padding-top: 2rem;
+    padding-top: 0;
 }
 
 .info-section h1 {
@@ -228,7 +228,7 @@
     /* z-index: 1; */
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem 4rem;
+    padding: 0 2rem 2rem;
 }
 
 .review-card {

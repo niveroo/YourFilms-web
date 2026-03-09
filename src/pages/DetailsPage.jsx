@@ -281,7 +281,7 @@ const DetailsPage = () => {
                     )
                 ) : (
                     <div className="login-to-review">
-                        Please <Link to="/auth" className="login-link">Log In</Link> to leave a review.
+                        Please <Link to="/login" className="login-link">Log In</Link> to leave a review.
                     </div>
                 )}
 

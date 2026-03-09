@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
+import starFilled from '../assets/star-filled.png';
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -176,13 +177,15 @@ const ProfilePage = () => {
                                     </button>
                                 ))}
                             </div>
-                            <label className="favorite-filter">
+                            <label className={`favorite-filter-btn ${showOnlyFavorites ? 'active' : ''}`}>
                                 <input
                                     type="checkbox"
                                     checked={showOnlyFavorites}
                                     onChange={(e) => setShowOnlyFavorites(e.target.checked)}
+                                    className="hidden-checkbox"
                                 />
-                                Only Favorite
+                                <img src={starFilled} alt="star" className="filter-star-img" />
+                                <span className="filter-text">Only Favourite</span>
                             </label>
                         </div>
 
@@ -218,23 +221,14 @@ const ProfilePage = () => {
                                         id: r.movie?.tmdbId,
                                         rating: r.rating
                                     }}
+                                    originalContent={r.content}
                                     isEditing={editingReviewId === r.id}
                                     onEdit={() => handleEditReview(r)}
                                     onDelete={() => handleDeleteReview(r.id)}
-                                >
-                                    {editingReviewId === r.id ? (
-                                        <div className="inline-review-form-wrapper" style={{ marginTop: '10px' }}>
-                                            <ReviewForm
-                                                initialData={{ rating: r.rating, content: r.content }}
-                                                onSubmit={(data) => handleUpdateReview(r.id, data)}
-                                                onCancel={() => setEditingReviewId(null)}
-                                                isSubmitting={isSubmittingReview}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <p className="rmc-review-text">{r.content}</p>
-                                    )}
-                                </ReviewMovieCard>
+                                    onUpdate={(data) => handleUpdateReview(r.id, data)}
+                                    onCancel={() => setEditingReviewId(null)}
+                                    isSubmitting={isSubmittingReview}
+                                />
                             ))
                         ) : (
                             <div className="no-data">You haven't written any reviews yet.</div>
