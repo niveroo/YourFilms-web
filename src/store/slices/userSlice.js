@@ -3,13 +3,20 @@ import API from '../../services/API';
 
 export const login = createAsyncThunk(
     'user/login',
-    async ({ username, password, rememberMe }, { rejectWithValue }) => {
+    async ({ username, password }, { rejectWithValue }) => {
         try {
             const data = await API.login(username, password);
-            // data might be the token string directly
-            return { token: typeof data === 'string' ? data : data.token };
+            const token = typeof data === 'string' ? data : data.token;
+
+            if (token) {
+                API.setToken(token);
+                // After successful login, immediately fetch user profile
+                const user = await API.getUserData();
+                return { token, user };
+            }
+            return rejectWithValue('No token received');
         } catch (error) {
-            return rejectWithValue('Login failed');
+            return rejectWithValue(error.message || 'Login failed');
         }
     }
 );
@@ -18,24 +25,19 @@ export const register = createAsyncThunk(
     'user/register',
     async ({ username, email, password }, { rejectWithValue }) => {
         try {
-            const data = await API.register(username, email, password);
-            return { token: typeof data === 'string' ? data : data.token };
+            await API.register(username, email, password);
+            return { success: true };
         } catch (error) {
-            return rejectWithValue('Registration failed');
+            return rejectWithValue(error.message || 'Registration failed');
         }
     }
 );
 
 export const logout = createAsyncThunk(
     'user/logout',
-    async (_, { rejectWithValue }) => {
-        try {
-            await API.logout();
-            API.clearToken();
-            return;
-        } catch (error) {
-            return rejectWithValue('Logout failed');
-        }
+    async () => {
+        API.clearToken();
+        return;
     }
 );
 
@@ -49,6 +51,7 @@ export const initializeUser = createAsyncThunk(
                 const user = await API.getUserData();
                 return { token, user };
             } catch (error) {
+                API.clearToken();
                 return rejectWithValue('Failed to fetch user data');
             }
         } else {
@@ -65,7 +68,11 @@ const userSlice = createSlice({
         loading: false,
         error: null,
     },
-    reducers: {},
+    reducers: {
+        clearError: (state) => {
+            state.error = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(login.pending, (state) => {
@@ -76,7 +83,6 @@ const userSlice = createSlice({
                 state.user = action.payload.user;
                 state.isLoggedIn = true;
                 state.loading = false;
-                API.setToken(action.payload.token); // Store token via cookie
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -93,23 +99,16 @@ const userSlice = createSlice({
             .addCase(initializeUser.rejected, (state, action) => {
                 state.loading = false;
                 state.isLoggedIn = false;
-                state.error = action.payload;
+                // state.error = action.payload; // Usually don't show init error to user
             })
-            .addCase(logout.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(logout.fulfilled, (state, action) => {
+            .addCase(logout.fulfilled, (state) => {
                 state.user = null;
                 state.isLoggedIn = false;
                 state.loading = false;
-            })
-            .addCase(logout.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
+                state.error = null;
             });
     },
 });
 
-export const { } = userSlice.actions;
+export const { clearError } = userSlice.actions;
 export default userSlice.reducer;

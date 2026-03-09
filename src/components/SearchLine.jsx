@@ -27,7 +27,7 @@ const SearchLine = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
             />
-            <button type="button" onClick={handleSearchClick}>
+            <button type="button" onClick={handleSearchClick} disabled={!searchQuery.trim()}>
                 Search
             </button>
         </div>

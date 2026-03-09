@@ -2,16 +2,13 @@ import { useEffect, useState } from 'react';
 import API from '../services/API';
 import BookmarkMovieCard from '../components/BookmarkMovieCard';
 import ReviewMovieCard from '../components/ReviewMovieCard';
-
-import ReviewForm from '../components/ReviewForm';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
 import starFilled from '../assets/star-filled.png';
 
 const ProfilePage = () => {
-    const [user, setUser] = useState(null);
     const [bookmarks, setBookmarks] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -35,12 +32,11 @@ const ProfilePage = () => {
         { id: 'dropped', label: 'Dropped' }
     ];
 
+    const { user } = useSelector((state) => state.user);
+
     const fetchData = async () => {
         setLoading(true);
         try {
-            const userData = await API.getUserData();
-            setUser(userData);
-
             const bookmarksData = await API.getBookmarks();
             setBookmarks(bookmarksData || []);
 
@@ -132,110 +128,111 @@ const ProfilePage = () => {
 
     return (
         <div className="profile-page">
-            <header className="profile-header">
-                <div className="user-info">
-                    <h1>{user?.username || 'User Profile'}</h1>
-                    <div className="user-details">
-                        <span>{user?.email}</span>
-                        <span>Joined: {new Date(user?.createdAt).toLocaleDateString()}</span>
-                    </div>
-                </div>
-                <div className="profile-actions">
-                    <button className="profile-btn" onClick={() => navigate('/edit-profile')}>Edit Profile</button>
-                    <button className="profile-btn" onClick={handleLogout}>Logout</button>
-                    <button className="profile-btn danger" onClick={handleDeleteAccount}>Delete Account</button>
-                </div>
-            </header>
-
-            <div className="main-tabs">
-                <button
-                    className={`main-tab ${activeTab === 'bookmarks' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('bookmarks')}
-                >
-                    Bookmarks ({bookmarks.length})
-                </button>
-                <button
-                    className={`main-tab ${activeTab === 'reviews' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('reviews')}
-                >
-                    Reviews ({reviews.length})
-                </button>
-            </div>
-
-            <main className="profile-content">
-                {activeTab === 'bookmarks' && (
-                    <>
-                        <div className="content-filters">
-                            <div className="category-tabs">
-                                {categories.map(cat => (
-                                    <button
-                                        key={cat.id}
-                                        className={`cat-tab ${activeCategory === cat.id ? 'active' : ''}`}
-                                        onClick={() => setActiveCategory(cat.id)}
-                                    >
-                                        {cat.label}
-                                    </button>
-                                ))}
-                            </div>
-                            <label className={`favorite-filter-btn ${showOnlyFavorites ? 'active' : ''}`}>
-                                <input
-                                    type="checkbox"
-                                    checked={showOnlyFavorites}
-                                    onChange={(e) => setShowOnlyFavorites(e.target.checked)}
-                                    className="hidden-checkbox"
-                                />
-                                <img src={starFilled} alt="star" className="filter-star-img" />
-                                <span className="filter-text">Only Favourite</span>
-                            </label>
+            <div className="profile-container">
+                <header className="profile-header">
+                    <div className="user-info">
+                        <h1>{user?.username || 'User Profile'}</h1>
+                        <div className="user-details">
+                            <span>{user?.email}</span>
+                            <span>Joined: {new Date(user?.createdAt).toLocaleDateString()}</span>
                         </div>
-
-                        {filteredBookmarks.length > 0 ? (
-                            <div className="profile-grid">
-                                {filteredBookmarks.map(b => (
-                                    <BookmarkMovieCard
-                                        key={b.id}
-                                        movie={{
-                                            ...b.movie,
-                                            id: b.movie.tmdbId,
-                                        }}
-                                        onStatusChange={(newStatus) => handleBookmarkStatusChange(b, newStatus)}
-                                        category={b.category}
-                                        isFavorite={b.isFavorite}
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="no-data">No bookmarks found in this category.</div>
-                        )}
-                    </>
-                )}
-
-                {activeTab === 'reviews' && (
-                    <div className="stretched-list">
-                        {reviews.length > 0 ? (
-                            reviews.map(r => (
-                                <ReviewMovieCard
-                                    key={r.id}
-                                    movie={{
-                                        ...r.movie,
-                                        id: r.movie?.tmdbId,
-                                        rating: r.rating
-                                    }}
-                                    originalContent={r.content}
-                                    isEditing={editingReviewId === r.id}
-                                    onEdit={() => handleEditReview(r)}
-                                    onDelete={() => handleDeleteReview(r.id)}
-                                    onUpdate={(data) => handleUpdateReview(r.id, data)}
-                                    onCancel={() => setEditingReviewId(null)}
-                                    isSubmitting={isSubmittingReview}
-                                />
-                            ))
-                        ) : (
-                            <div className="no-data">You haven't written any reviews yet.</div>
-                        )}
                     </div>
-                )}
-            </main>
+                    <div className="profile-actions">
+                        <button className="profile-btn" onClick={handleLogout}>Logout</button>
+                        <button className="profile-btn danger" onClick={handleDeleteAccount}>Delete Account</button>
+                    </div>
+                </header>
+
+                <div className="main-tabs">
+                    <button
+                        className={`main-tab ${activeTab === 'bookmarks' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('bookmarks')}
+                    >
+                        Bookmarks ({bookmarks.length})
+                    </button>
+                    <button
+                        className={`main-tab ${activeTab === 'reviews' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('reviews')}
+                    >
+                        Reviews ({reviews.length})
+                    </button>
+                </div>
+
+                <main className="profile-content">
+                    {activeTab === 'bookmarks' && (
+                        <>
+                            <div className="content-filters">
+                                <div className="category-tabs">
+                                    {categories.map(cat => (
+                                        <button
+                                            key={cat.id}
+                                            className={`cat-tab ${activeCategory === cat.id ? 'active' : ''}`}
+                                            onClick={() => setActiveCategory(cat.id)}
+                                        >
+                                            {cat.label}
+                                        </button>
+                                    ))}
+                                </div>
+                                <label className={`favorite-filter-btn ${showOnlyFavorites ? 'active' : ''}`}>
+                                    <input
+                                        type="checkbox"
+                                        checked={showOnlyFavorites}
+                                        onChange={(e) => setShowOnlyFavorites(e.target.checked)}
+                                        className="hidden-checkbox"
+                                    />
+                                    <img src={starFilled} alt="star" className="filter-star-img" />
+                                    <span className="filter-text">Only Favourite</span>
+                                </label>
+                            </div>
+
+                            {filteredBookmarks.length > 0 ? (
+                                <div className="profile-grid">
+                                    {filteredBookmarks.map(b => (
+                                        <BookmarkMovieCard
+                                            key={b.id}
+                                            movie={{
+                                                ...b.movie,
+                                                id: b.movie.tmdbId,
+                                            }}
+                                            onStatusChange={(newStatus) => handleBookmarkStatusChange(b, newStatus)}
+                                            category={b.category}
+                                            isFavorite={b.isFavorite}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="no-data">No bookmarks found in this category.</div>
+                            )}
+                        </>
+                    )}
+
+                    {activeTab === 'reviews' && (
+                        <div className="stretched-list">
+                            {reviews.length > 0 ? (
+                                reviews.map(r => (
+                                    <ReviewMovieCard
+                                        key={r.id}
+                                        movie={{
+                                            ...r.movie,
+                                            id: r.movie?.tmdbId,
+                                            rating: r.rating
+                                        }}
+                                        originalContent={r.content}
+                                        isEditing={editingReviewId === r.id}
+                                        onEdit={() => handleEditReview(r)}
+                                        onDelete={() => handleDeleteReview(r.id)}
+                                        onUpdate={(data) => handleUpdateReview(r.id, data)}
+                                        onCancel={() => setEditingReviewId(null)}
+                                        isSubmitting={isSubmittingReview}
+                                    />
+                                ))
+                            ) : (
+                                <div className="no-data">You haven't written any reviews yet.</div>
+                            )}
+                        </div>
+                    )}
+                </main>
+            </div>
         </div>
     );
 };

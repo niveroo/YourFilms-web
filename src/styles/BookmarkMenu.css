@@ -161,6 +161,7 @@
     height: 18px;
     object-fit: contain;
     transition: transform 0.3s ease;
+    padding: 4px;
 }
 
 .star-icon-img {
@@ -191,15 +192,14 @@
     height: 16px;
     min-width: 16px;
     object-fit: contain;
-    /* Remove the white filter if we want original colors, or keep it if it's supposed to be white */
-    /* The asset is white-bin.png, so maybe it doesn't need a filter if background is dark */
 }
 
 .bookmark-menu-container:hover .delete-bookmark-btn {
-    width: 50px;
+    width: 28px;
+    height: 28px;
     opacity: 1;
-    padding: 0 0px;
-    margin-left: 0px;
+    padding: 0;
+    margin-left: 0;
 }
 
 .delete-bookmark-btn:hover {

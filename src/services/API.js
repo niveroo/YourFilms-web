@@ -51,14 +51,14 @@ class API {
 	}
 
 	static async login(username, password) {
-		return this.request("POST", "/api/User/login", {
+		return this.request("POST", "/api/User/Login", {
 			username,
 			password,
 		});
 	}
 
 	static async getUserData() {
-		return this.request("GET", "/api/User/me");
+		return this.request("GET", "/api/User/GetUserInfo");
 	}
 
 	static async logout() {
@@ -67,7 +67,7 @@ class API {
 	}
 
 	static async register(username, email, password) {
-		return this.request("POST", "/api/User/register", {
+		return this.request("POST", "/api/User/Register", {
 			username,
 			email,
 			password,
@@ -116,7 +116,7 @@ class API {
 	}
 
 	static async getBookmarks() {
-		const res = await this.request("GET", "/api/Bookmarks/user/me");
+		const res = await this.request("GET", "/api/Bookmarks/User/GetMyBookmarks");
 		if (Array.isArray(res)) {
 			res.forEach(b => {
 				if (b.category !== undefined) {
@@ -178,12 +178,12 @@ class API {
 			isFavorite: data.isFavorite,
 			category: this.mapCategoryToEnum(data.category)
 		};
-		return this.request("POST", `/api/Bookmarks/Update/${data.bookmarkId}`, payload);
+		return this.request("POST", `/api/Bookmarks/Update`, payload);
 	}
 
 	static async checkBookmark(tmdbId, mediaType) {
 		try {
-			const res = await this.request("GET", `/api/Bookmarks/check?tmdbId=${tmdbId}&mediaType=${mediaType}`);
+			const res = await this.request("GET", `/api/Bookmarks/GetBookmark?tmdbId=${tmdbId}&mediaType=${mediaType}`);
 			if (res && res.isBookmarked && res.bookmark) {
 				res.bookmark.category = this.mapEnumToCategory(res.bookmark.category);
 				return res.bookmark;
@@ -196,11 +196,11 @@ class API {
 	}
 
 	static async getReviews(tmdbId, mediaType) {
-		return this.request("GET", `/api/Reviews/media/?tmdbId=${tmdbId}&mediaType=${mediaType}`);
+		return this.request("GET", `/api/Reviews/GetReviewsByMediaId?tmdbId=${tmdbId}&mediaType=${mediaType}`);
 	}
 
 	static async getUserReviews() {
-		return this.request("GET", "/api/Reviews/user/");
+		return this.request("GET", "/api/Reviews/GetUserReviews");
 	}
 
 	static async addReview(data) {
@@ -209,12 +209,12 @@ class API {
 	}
 
 	static async deleteReview(reviewId) {
-		return this.request("DELETE", `/api/Reviews/Delete${reviewId}`);
+		return this.request("DELETE", `/api/Reviews/Delete/${reviewId}`);
 	}
 
 	static async updateReview(reviewId, data) {
-		// data: { rating, content, etc }
-		return this.request("POST", `/api/Reviews/Update/${reviewId}`, data);
+		// data: { rating, content }
+		return this.request("POST", `/api/Reviews/Update`, { ...data, reviewId });
 	}
 }
 

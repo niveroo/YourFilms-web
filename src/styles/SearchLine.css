@@ -14,4 +14,11 @@
 
 .banner-search button {
     border-radius: 12px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.banner-search button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

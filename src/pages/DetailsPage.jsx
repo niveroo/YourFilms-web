@@ -131,11 +131,7 @@ const DetailsPage = () => {
     const handleUpdateReview = async (reviewId, reviewData) => {
         setIsSubmittingReview(true);
         try {
-            await API.updateReview(reviewId, {
-                reviewId: reviewId,
-                rating: reviewData.rating,
-                content: reviewData.content
-            });
+            await API.updateReview(reviewId, reviewData);
             await fetchReviews();
         } catch (error) {
             console.error("Failed to update review:", error);
