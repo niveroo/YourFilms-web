@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '/src/styles/Searchline.css';
+import '/src/styles/SearchLine.css';
 
 const SearchLine = () => {
     const navigate = useNavigate();
