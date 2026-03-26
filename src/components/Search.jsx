@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMovieGenres } from "../hooks/useMovieGenres";
 import { useTVGenres } from "../hooks/useTVGenres";
-import "./Search.css";
+import "../styles/Search.css";
 import SearchLine from "./SearchLine";
 import { useNavigate } from "react-router-dom";
 import { YearSelector } from "./YearSelector";
