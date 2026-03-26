@@ -29,7 +29,7 @@ const ReviewMovieCard = ({ movie, originalContent, onEdit, onDelete, onUpdate, o
 
     const imageUrl = movie.posterPath
         ? `https://image.tmdb.org/t/p/w200${movie.posterPath}`
-        : 'https://via.placeholder.com/200x300?text=No+Image';
+        : 'https://placehold.co/200x300?text=No+Image';
 
     return (
         <div className={`review-movie-card ${isEditing ? 'editing' : ''}`}>

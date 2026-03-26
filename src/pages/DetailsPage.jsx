@@ -164,7 +164,7 @@ const DetailsPage = () => {
         : ''; // Or a default backdrop
     const posterUrl = details.posterPath
         ? `https://image.tmdb.org/t/p/w500${details.posterPath}`
-        : 'https://via.placeholder.com/500x750?text=No+Image';
+        : 'https://placehold.co/500x750?text=No+Image';
 
     const releaseDate = details.releaseDate || details.firstAirDate;
     const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
@@ -236,7 +236,7 @@ const DetailsPage = () => {
                                     <div key={`${season.id}-${index}`} className="season-card">
                                         <div className="season-poster">
                                             <img
-                                                src={season.posterPath ? `https://image.tmdb.org/t/p/w200${season.posterPath}` : 'https://via.placeholder.com/200x300?text=No+Image'}
+                                                src={season.posterPath ? `https://image.tmdb.org/t/p/w200${season.posterPath}` : 'https://placehold.co/200x300?text=No+Image'}
                                                 alt={season.name}
                                             />
                                         </div>

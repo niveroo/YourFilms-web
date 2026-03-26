@@ -11,7 +11,7 @@ const MovieCard = ({ media }) => {
 
     const imageUrl = media.posterPath
         ? `https://image.tmdb.org/t/p/w500${media.posterPath}`
-        : 'https://via.placeholder.com/500x750?text=No+Image';
+        : 'https://placehold.co/500x750?text=No+Image';
 
     return (
         <div className="movie-card" onClick={handleClick}>

@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 
 class API {
-	static baseURL = "";
+	static baseURL = "http://localhost:5000";
 
 	static getToken() {
 		return Cookies.get("token");

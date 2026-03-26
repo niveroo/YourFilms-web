@@ -168,7 +168,9 @@
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.5;
     margin-bottom: 15px;
-    padding-right: 5px;
+    padding-right: 14px;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Custom Scrollbar */
@@ -262,6 +264,9 @@
     resize: none;
     outline: none;
     transition: border-color 0.2s;
+    box-sizing: border-box;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .rmc-edit-textarea:focus {

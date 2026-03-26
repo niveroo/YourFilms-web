@@ -92,8 +92,10 @@
 .review-card p {
     color: #ccc;
     line-height: 1.6;
-    margin: 0;
+    margin: 16px 0 0 0;
     white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .review-actions {
@@ -217,6 +219,9 @@
     resize: vertical;
     outline: none;
     transition: border-color 0.2s;
+    box-sizing: border-box;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .content-input textarea:focus {

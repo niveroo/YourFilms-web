@@ -146,15 +146,8 @@
     /* Clean look as per image */
     border-radius: 8px;
     padding: 1rem;
-    transition: background-color 0.2s;
     border: 1px solid transparent;
     /* Reserve space for border */
-}
-
-.season-card:hover {
-    background: rgba(255, 255, 255, 0.05);
-    /* Highlight on hover */
-    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .season-poster {

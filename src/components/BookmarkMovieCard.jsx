@@ -12,7 +12,7 @@ const BookmarkMovieCard = ({ movie, onStatusChange, category, isFavorite, childr
 
     const imageUrl = movie.posterPath
         ? `https://image.tmdb.org/t/p/w500${movie.posterPath}`
-        : 'https://via.placeholder.com/500x750?text=No+Image';
+        : 'https://placehold.co/500x750?text=No+Image';
 
     return (
         <div className="profile-movie-card">
